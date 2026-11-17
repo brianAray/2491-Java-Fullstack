@@ -1,0 +1,37 @@
+DROP TABLE IF EXISTS student_courses CASCADE;
+DROP TABLE IF EXISTS student_profiles CASCADE;
+DROP TABLE IF EXISTS students CASCADE;
+DROP TABLE IF EXISTS courses CASCADE;
+DROP TABLE IF EXISTS departments CASCADE;
+
+create table departments (
+	id SERIAL primary key,
+	name VARCHAR(100) not NULL
+);
+
+create table courses (
+	id SERIAL primary key,
+	title VARCHAR(100) not null,
+	credits INT not NULL
+);
+
+create table students (
+	id SERIAL primary key,
+	name VARCHAR(100) not null,
+	department_id INT not null references departments(id) on delete CASCADE
+);
+
+create table student_profiles (
+	id SERIAL primary key,
+	student_id INT unique not null references students(id) on delete cascade,
+	bio text not NULL
+);
+
+create table student_courses (
+	student_id INT not null references students(id) on delete cascade,
+	course_id INT not null references courses(id) on delete cascade,
+	primary key (student_id, course_id)
+);
+
+INSERT INTO departments (name) VALUES ('Computer Science'), ('Mathematics');
+INSERT INTO courses (title, credits) VALUES ('Data Structures', 4), ('Linear Algebra', 3);
